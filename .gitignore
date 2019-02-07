@@ -1,0 +1,8 @@
+*.swp
+*.swo
+/build/
+/src/version.h
+*.orig
+/tmp/
+
+.DS_Store

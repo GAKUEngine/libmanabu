@@ -1,0 +1,8 @@
+#ifndef _LIBMANABU_VERSION_H_
+#define _LIBMANABU_VERSION_H_
+
+namespace Manabu {
+  static const char* LIBMANABU_VERSION = "@MANABU_LIB_VERSION@";
+} // namespace Manabu
+
+#endif  // _LIBMANABU_VERSION_H_
