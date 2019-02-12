@@ -7,7 +7,8 @@
 #include <unordered_map>
 using namespace std;
 
-namespace Manabu {
+namespace Manabu
+{
 	//! Performs transactions with a GAKU server through the standard API
 	class Transactor
 	{
@@ -28,6 +29,10 @@ namespace Manabu {
 		string request(const string& requestname, const string& endpoint, const string& query, int* status);
 		// ↑↑↑Internal Helpers↑↑↑
 
+		//! If an Authenticator is active the credentials will be updated dynamically
+		string authToken;
+		bool authTokenSet;
+
 	protected:
 		string protocol;
 		string host;
@@ -36,10 +41,6 @@ namespace Manabu {
 		bool connectionActive;
 
 	public:
-		//! If an Authenticator is active the credentials will be updated dynamically
-		string username;
-		string auth_token;
-
 		//! Initialize the Transactor with a connection to a server
 		Transactor(const string protocol = "http", const string host = "localhost", unsigned int port = 9000, const string prefix = "api/v1");
 
@@ -52,6 +53,12 @@ namespace Manabu {
 		string POST(const string& endpoint, const unordered_map<string, string>& query = {{"", ""}}, int* status = NULL);
 		//! Delete with a query hash
 		string DELETE(const string& endpoint, const unordered_map<string, string>& query = {{"", ""}}, int* status = NULL);
+
+		//! Set the auth_token value and sets the authTokenSet flag to true
+		//! (!) This is usually not called by hand - an Authenticator will usually call this automatically.
+		void setAuthToken(const string token);
+		//! Clears the auth_token and sets the authTokenSet flag to false
+		void clearAuthToken();
 	};
 }
 

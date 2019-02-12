@@ -1,4 +1,4 @@
-#include <libmanabu.h>
+#include <manabu.h>
 
 #include <stdlib.h>
 using namespace std;
@@ -27,9 +27,30 @@ BOOST_AUTO_TEST_SUITE(connectivity_suite)
 	}
 
 	// Check that the [test] admin user can authenticate
-	BOOST_AUTO_TEST_CASE(auth_status) {
+	BOOST_AUTO_TEST_CASE(auth_success) {
 		Manabu::Manabu manabu = Manabu::Manabu();
 		manabu.connect("http", "localhost", 9000);
 		BOOST_CHECK_EQUAL(manabu.authenticate("admin", "123456"), true);
+	}
+
+	// Check that a bad authentication fails gracefully
+	BOOST_AUTO_TEST_CASE(auth_failure) {
+		Manabu::Manabu manabu = Manabu::Manabu();
+		manabu.connect("http", "localhost", 9000);
+		BOOST_CHECK_EQUAL(manabu.authenticate("admin", "9999"), false);
+	}
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(student_suite)
+	// Check that the [test] server is running
+	BOOST_AUTO_TEST_CASE(student_save_update_delete) {
+		Manabu::Manabu manabu = Manabu::Manabu();
+		manabu.connect("http", "localhost", 9000);
+		manabu.authenticate("admin", "123456");
+		Manabu::Student student = Manabu::Student(manabu.transactor, "エンジン", "学", 1999, 9, 1);
+		BOOST_CHECK_EQUAL(student.save(true), true); // Initial save
+		student.middleName = "Flux";
+		BOOST_CHECK_EQUAL(student.save(), true); // Update
+		BOOST_CHECK_EQUAL(student.remove(), true); // Remove
 	}
 BOOST_AUTO_TEST_SUITE_END()

@@ -4,6 +4,7 @@
 #include "transactor.h"
 
 #include <string>
+#include <thread>
 using namespace std;
 
 
@@ -19,15 +20,23 @@ namespace Manabu
 		Tokens *tokens;
 
 		string username;
-		string auth_token;
-		string refresh_token;
+		string authToken;
+		unsigned int authTokenTimeout;
+		string refreshToken;
+		unsigned int refreshTokenTimeout;
 
+		bool handleAuthResponse(const string response);
+		void updateTransactorAuthToken();
+
+		thread *refreshThread;
+		static void refreshThreadMonitor(unsigned int timeout, Manabu::Authenticator *authObj);
 
 		public:
 		bool authenticated;
-		Authenticator(const string username, const string password, Transactor *activeTransactor);
+		Authenticator(Transactor *transactor, const string username, const string password);
+		~Authenticator();
 
-		void updateTransactorAuth();
+		bool refreshAuth();
 	};
 }
 

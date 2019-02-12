@@ -15,12 +15,14 @@ namespace
 	}
 }
 
-Manabu::Transactor::Transactor(const string api_protocol, const string api_host, unsigned int api_port, const string api_prefix)
+Manabu::Transactor::Transactor(const string protocol, const string host, unsigned int port, const string prefix)
 {
-	this->protocol = api_protocol;
-	this->host = api_host;
-	this->port = api_port;
-	this->prefix = api_prefix;
+	this->protocol = protocol;
+	this->host = host;
+	this->port = port;
+	this->prefix = prefix;
+	this->authToken = "";
+	this->authTokenSet = false;
 }
 
 unordered_map<string, string> Manabu::Transactor::queryTemplate(bool defaults)
@@ -92,6 +94,8 @@ string Manabu::Transactor::request(const string& verb, const string& endpoint, c
 		struct curl_slist *headers = NULL;
 		headers = curl_slist_append(headers, "charset: utf-8");
 		headers = curl_slist_append(headers, "Accept: application/msgpack");
+		if (this->authTokenSet)
+			headers = curl_slist_append(headers, "Authorization: " + this->connectionActive);
 
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 		curl_easy_setopt(curl, CURLOPT_USERAGENT, "libmanabu/1.0");
@@ -105,6 +109,7 @@ string Manabu::Transactor::request(const string& verb, const string& endpoint, c
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)query.length());
 
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+
 
 		/*const std::string& CACertPath = Manabu::getCACertPath();
 		if	(!CACertPath.empty())
@@ -147,4 +152,16 @@ string Manabu::Transactor::POST(const string& endpoint, const unordered_map<stri
 string Manabu::Transactor::DELETE(const string& endpoint, const unordered_map<string, string>& query, int* status)
 {
 	return request("DELETE", endpoint, query, status);
+}
+
+void Manabu::Transactor::setAuthToken(const string token)
+{
+	this->authToken = token;
+	this->authTokenSet = true;
+}
+
+void Manabu::Transactor::clearAuthToken()
+{
+	this->authToken = "";
+	this->authTokenSet = false;
 }

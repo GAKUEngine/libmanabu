@@ -1,33 +1,62 @@
 #include "authenticator.h"
 
 #include <iostream>
+#include <chrono>
 using namespace std;
 
-Manabu::Authenticator::Authenticator(const string username, const string password, Transactor *activeTransactor)
+Manabu::Authenticator::Authenticator(Transactor *transactor, const string username, const string password)
 {
+	bool responseSucceeded = false;
+
 	this->authenticated = false;
 
-	if (activeTransactor == NULL)
+	if (transactor == NULL)
 		return;
 
-	this->transactor = activeTransactor;
-	string response = this->transactor->POST("authenticate", {{"username", username}, {"password", password}});
+	this->transactor = transactor;
+	responseSucceeded = handleAuthResponse(
+			this->transactor->POST("authenticate", {{"username", username}, {"password", password}}));
+
+	this->authenticated = true;
+}
+
+void Manabu::Authenticator::refreshThreadMonitor(unsigned int timeout, Manabu::Authenticator *authObj)
+{
+	this_thread::sleep_for(chrono::minutes(timeout));
+	authObj->refreshAuth();
+}
+
+bool Manabu::Authenticator::handleAuthResponse(const string response)
+{
 	// TODO: handle failed authentication
 
 	msgpack::object_handle moh = msgpack::unpack(response.data(), response.size());
 	msgpack::object mo = moh.get();
 	TokenContainer tokenContainer = mo.as<TokenContainer>();
 	this->username = username;
-	this->auth_token = tokenContainer.at("tokens").at("auth_token");
-	this->refresh_token = tokenContainer.at("tokens").at("refresh_token");
+	this->authToken = tokenContainer.at("tokens").at("auth_token");
+	this->refreshToken = tokenContainer.at("tokens").at("refresh_token");
+	//this->authTokenTimeout = tokenContainer.at("tokens").at("auth_token_timeout");
+	//this->refreshTokenTimeout = tokenContainer.at("tokens").at("refresh_token_timeout");
 
-	updateTransactorAuth();
+	updateTransactorAuthToken();
 
-	this->authenticated = true;
+	// Start a refresh thread to automatically refresh the auth token
+	if (this->refreshThread != NULL) // stop existing thread if one is active
+		this->refreshThread->join();
+
+	this->refreshThread = new thread(Manabu::Authenticator::refreshThreadMonitor, this->authTokenTimeout - 1, this);
+
+	return true;
 }
 
-void Manabu::Authenticator::updateTransactorAuth()
+void Manabu::Authenticator::updateTransactorAuthToken()
 {
-	this->transactor->username = this->username;
-	this->transactor->auth_token = this->auth_token;
+	this->transactor->setAuthToken(this->authToken);
+}
+
+bool Manabu::Authenticator::refreshAuth()
+{
+	return handleAuthResponse(
+		this->transactor->POST("authenticate/renew", {{"refresh_token", this->refreshToken}}));
 }

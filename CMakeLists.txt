@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 
 find_program(CMAKE_C_COMPILER NAMES $ENV{CC} gcc PATHS ENV PATH NO_DEFAULT_PATH)
 find_program(CMAKE_CXX_COMPILER NAMES $ENV{CXX} g++ PATHS ENV PATH NO_DEFAULT_PATH)
@@ -29,9 +29,10 @@ find_package(CURL)
 
 set(LIBMANABU_DYNAMIC_LIB_TARGET manabu)
 set(LIBMANABU_CXX_FILES
-	${PROJECT_SOURCE_DIR}/src/libmanabu.cpp
+	${PROJECT_SOURCE_DIR}/src/manabu.cpp
 	${PROJECT_SOURCE_DIR}/src/manabu/transactor.cpp
 	${PROJECT_SOURCE_DIR}/src/manabu/authenticator.cpp
+	${PROJECT_SOURCE_DIR}/src/manabu/student.cpp
 )
 
 set(LIBMANABU_LINK_LIBRARIES

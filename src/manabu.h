@@ -1,5 +1,5 @@
-#ifndef _LIBMANABU_H_
-#define _LIBMANABU_H_
+#ifndef _MANABU_H_
+#define _MANABU_H_
 
 /*! \mainpage libmanabu Portable Low-Level Client Package
  *
@@ -21,6 +21,8 @@
 #include "manabu/transactor.h"
 #include "manabu/authenticator.h"
 
+#include "manabu/student.h"
+
 #include <string>
 using namespace std;
 
@@ -29,12 +31,13 @@ using namespace std;
 namespace Manabu {
 	class Manabu {
 		private:
-			//! Transactor that is used to perform transactions with the server
-			Transactor *transactor;
-			//! Authenticator that is used to authenticate the user and maintain the session
-			Authenticator *authenticator;
 
 		public:
+		//! Transactor that is used to perform transactions with the server
+		Transactor *transactor;
+		//! Authenticator that is used to authenticate the user and maintain the session
+		Authenticator *authenticator;
+
 		static const uint8_t apiVersion;
 
 		Manabu();
@@ -46,4 +49,4 @@ namespace Manabu {
 	}; // class Manabu
 } // namespace Manabu
 
-#endif /* _LIBMANABU_H_ */
+#endif /* _MANABU_H_ */

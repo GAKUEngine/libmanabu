@@ -1,4 +1,4 @@
-#include "libmanabu.h"
+#include "manabu.h"
 
 #include <iostream>
 using namespace std;
@@ -37,6 +37,6 @@ bool Manabu::Manabu::authenticate(const string username, const string password)
 	if (transactor == NULL)
 		return false;
 
-	authenticator = new Authenticator(username, password, this->transactor);
+	authenticator = new Authenticator(this->transactor, username, password);
 	return authenticator->authenticated;
 }
