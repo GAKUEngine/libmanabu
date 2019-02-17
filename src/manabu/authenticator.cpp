@@ -5,6 +5,7 @@
 using namespace std;
 
 Manabu::Authenticator::Authenticator(Transactor *transactor, const string username, const string password)
+	: refreshThread(NULL)
 {
 	bool responseSucceeded = false;
 
@@ -17,7 +18,7 @@ Manabu::Authenticator::Authenticator(Transactor *transactor, const string userna
 	responseSucceeded = handleAuthResponse(
 			this->transactor->POST("authenticate", {{"username", username}, {"password", password}}));
 
-	this->authenticated = true;
+	this->authenticated = responseSucceeded;
 }
 
 void Manabu::Authenticator::refreshThreadMonitor(unsigned int timeout, Manabu::Authenticator *authObj)
@@ -28,10 +29,15 @@ void Manabu::Authenticator::refreshThreadMonitor(unsigned int timeout, Manabu::A
 
 bool Manabu::Authenticator::handleAuthResponse(const string response)
 {
-	// TODO: handle failed authentication
-
 	msgpack::object_handle moh = msgpack::unpack(response.data(), response.size());
 	msgpack::object mo = moh.get();
+
+	// Check for auth failure/errors
+	if(	mo.type != msgpack::type::MAP
+		||	mo.via.map.size == 0
+		||	mo.via.map.ptr[0].key.as<std::string>().compare("error") == 0	)
+		return false;
+
 	TokenContainer tokenContainer = mo.as<TokenContainer>();
 	this->username = username;
 	this->authToken = tokenContainer.at("tokens").at("auth_token");
