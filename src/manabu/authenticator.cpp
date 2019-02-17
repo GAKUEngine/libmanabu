@@ -29,15 +29,13 @@ void Manabu::Authenticator::refreshThreadMonitor(unsigned int timeout, Manabu::A
 
 bool Manabu::Authenticator::handleAuthResponse(const string response)
 {
-	// TODO: handle failed authentication
-
 	msgpack::object_handle moh = msgpack::unpack(response.data(), response.size());
 	msgpack::object mo = moh.get();
 
-	// Check error.
-	if(			mo.type != msgpack::type::MAP
-			||	mo.via.map.size == 0
-			||	mo.via.map.ptr[0].key.as<std::string>().compare("error") == 0	)
+	// Check for auth failure/errors
+	if(	mo.type != msgpack::type::MAP
+		||	mo.via.map.size == 0
+		||	mo.via.map.ptr[0].key.as<std::string>().compare("error") == 0	)
 		return false;
 
 	TokenContainer tokenContainer = mo.as<TokenContainer>();
