@@ -95,7 +95,7 @@ string Manabu::Transactor::request(const string& verb, const string& endpoint, c
 		headers = curl_slist_append(headers, "charset: utf-8");
 		headers = curl_slist_append(headers, "Accept: application/msgpack");
 		if (this->authTokenSet)
-			headers = curl_slist_append(headers, "Authorization: " + this->connectionActive);
+			headers = curl_slist_append(headers, ("Authorization: " + this->authToken).c_str());
 
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 		curl_easy_setopt(curl, CURLOPT_USERAGENT, "libmanabu/1.0");

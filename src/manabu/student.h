@@ -15,6 +15,9 @@ namespace Manabu
 	{
 		private:
 			Transactor *transactor;
+
+			const std::unordered_map<std::string, std::string> toQuery() const;
+
 		public:
 			string surname, name, middleName;
 			string surnameReading, nameReading, middleNameReading;
@@ -28,6 +31,8 @@ namespace Manabu
 			//! Save the student to the server (create or update)
 			//!	* force: Set to true to force overwrite when a collision is detected during creation 
 			bool save(bool force = false);
+
+			bool remove();
 	};
 }
 

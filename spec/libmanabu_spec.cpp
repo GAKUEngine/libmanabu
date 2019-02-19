@@ -51,6 +51,6 @@ BOOST_AUTO_TEST_SUITE(student_suite)
 		BOOST_CHECK_EQUAL(student.save(true), true); // Initial save
 		student.middleName = "Flux";
 		BOOST_CHECK_EQUAL(student.save(), true); // Update
-		//BOOST_CHECK_EQUAL(student.remove(), true); // Remove
+		BOOST_CHECK_EQUAL(student.remove(), true); // Remove
 	}
 BOOST_AUTO_TEST_SUITE_END()
