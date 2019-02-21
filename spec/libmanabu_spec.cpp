@@ -48,9 +48,9 @@ BOOST_AUTO_TEST_SUITE(student_suite)
 		manabu.connect("http", "localhost", 9000);
 		manabu.authenticate("admin", "123456");
 		Manabu::Student student = Manabu::Student(manabu.transactor, "エンジン", "学", 1999, 9, 1);
-		BOOST_CHECK_EQUAL(student.save(true), true); // Initial save
+		BOOST_CHECK_EQUAL(student.save(), true); // Initial save
 		student.middleName = "Flux";
-		BOOST_CHECK_EQUAL(student.save(), true); // Update
+		BOOST_CHECK_EQUAL(student.save(true), true); // Update
 		BOOST_CHECK_EQUAL(student.remove(), true); // Remove
 	}
 BOOST_AUTO_TEST_SUITE_END()

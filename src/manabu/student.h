@@ -19,10 +19,15 @@ namespace Manabu
 			const std::unordered_map<std::string, std::string> toQuery() const;
 
 		public:
+			static const unsigned int ID_NULL = 0xFFFFFFFF;
+
+			unsigned int id;
 			string surname, name, middleName;
 			string surnameReading, nameReading, middleNameReading;
 			unsigned int birthYear, birthMonth, birthDay;
 			gender_t gender;
+			string enrollment_status_code;
+			// binary picture;		// TODO Implements picture.
 
 
 			Student(Transactor *transactor);

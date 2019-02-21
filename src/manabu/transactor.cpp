@@ -154,6 +154,11 @@ string Manabu::Transactor::DELETE(const string& endpoint, const unordered_map<st
 	return request("DELETE", endpoint, query, status);
 }
 
+string Manabu::Transactor::PATCH(const string& endpoint, const unordered_map<string, string>& query, int* status)
+{
+	return request("PATCH", endpoint, query, status);
+}
+
 void Manabu::Transactor::setAuthToken(const string token)
 {
 	this->authToken = token;

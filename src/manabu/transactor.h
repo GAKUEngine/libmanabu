@@ -53,6 +53,8 @@ namespace Manabu
 		string POST(const string& endpoint, const unordered_map<string, string>& query = {{"", ""}}, int* status = NULL);
 		//! Delete with a query hash
 		string DELETE(const string& endpoint, const unordered_map<string, string>& query = {{"", ""}}, int* status = NULL);
+		//! Patch with a query hash
+		string PATCH(const string& endpoint, const unordered_map<string, string>& query = {{"", ""}}, int* status = NULL);
 
 		//! Set the auth_token value and sets the authTokenSet flag to true
 		//! (!) This is usually not called by hand - an Authenticator will usually call this automatically.
