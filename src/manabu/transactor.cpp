@@ -40,14 +40,9 @@ unordered_map<string, string> Manabu::Transactor::queryTemplate(bool defaults)
 
 string Manabu::Transactor::generateQueryString(const unordered_map<string, string>& query)
 {
-	stringstream query_ss;
-
-	for (auto q : query)
-		if (q.first != "" && q.second != "")
-			query_ss << q.first << "=" << q.second << "&";
-
-	string query_s = query_ss.str();
-	return query_s.substr(0, query_s.size() - 1);
+	std::stringstream buffer;
+	msgpack::pack(buffer, query);
+	return buffer.str();
 }
 
 string Manabu::Transactor::hex(unsigned int c)
@@ -93,6 +88,7 @@ string Manabu::Transactor::request(const string& verb, const string& endpoint, c
 	if (curl) {
 		struct curl_slist *headers = NULL;
 		headers = curl_slist_append(headers, "charset: utf-8");
+		headers = curl_slist_append(headers, "Content-Type: application/msgpack");
 		headers = curl_slist_append(headers, "Accept: application/msgpack");
 		if (this->authTokenSet)
 			headers = curl_slist_append(headers, ("Authorization: " + this->authToken).c_str());
