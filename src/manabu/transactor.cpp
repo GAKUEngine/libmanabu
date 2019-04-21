@@ -1,4 +1,5 @@
 #include "transactor.h"
+#include "../version.h"
 
 #include <curl/curl.h>
 #include <sstream>
@@ -98,7 +99,7 @@ string Manabu::Transactor::request(const string& verb, const string& endpoint, c
 			headers = curl_slist_append(headers, "Authorization: " + this->connectionActive);
 
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-		curl_easy_setopt(curl, CURLOPT_USERAGENT, "libmanabu/1.0");
+		curl_easy_setopt(curl, CURLOPT_USERAGENT, std::string("libmanabu/") + LIBMANABU_VERSION);
 
 		curl_easy_setopt(curl, CURLOPT_URL, url_stream.str().c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeMemoryCallback);
