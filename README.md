@@ -1,9 +1,37 @@
-libmanabu - The Manabu client for GAKU Engine
-=============================================
+libmanabu - The Manabu client library for GAKU Engine
+=====================================================
 libmanabu is a client library to interface with GAKU Engine written in C++, with interfaces for 
 C, Java, Python and PHP (*coming soon*). For native Ruby interfaces use the native 
 [Manabu](https://github.com/GAKUEngine/manabu) client.
 
+Building
+========
+libmanabu requires CMake and a few other tools to build. After cloning the repository, you can 
+build libmanabu with the following standard CMake build steps:
+
+```sh
+cd libmanabu
+mkdir build
+cd build
+cmake ..
+make
+```
+
+This will build the libmanabu dynamic library (and specs).
+
+Testing
+=======
+After building libmanabu with cmake, start up a gaku testing container instance with:
+
+```sh
+gaku contianer start
+gaku container testing
+```
+
+Then, run the specs built during the make process:
+```sh
+./spec/libmanabu_spec --log-level=all
+```
 
 License & Contribution
 ======================
