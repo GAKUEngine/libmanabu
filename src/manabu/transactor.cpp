@@ -96,7 +96,7 @@ string Manabu::Transactor::request(const string& verb, const string& endpoint, c
 		headers = curl_slist_append(headers, "charset: utf-8");
 		headers = curl_slist_append(headers, "Accept: application/msgpack");
 		if (this->authTokenSet)
-			headers = curl_slist_append(headers, "Authorization: " + this->connectionActive);
+			headers = curl_slist_append(headers, ("Authorization: " + this->authToken).c_str());
 
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 		curl_easy_setopt(curl, CURLOPT_USERAGENT, std::string("libmanabu/") + LIBMANABU_VERSION);
@@ -153,6 +153,11 @@ string Manabu::Transactor::POST(const string& endpoint, const unordered_map<stri
 string Manabu::Transactor::DELETE(const string& endpoint, const unordered_map<string, string>& query, int* status)
 {
 	return request("DELETE", endpoint, query, status);
+}
+
+string Manabu::Transactor::PATCH(const string& endpoint, const unordered_map<string, string>& query, int* status)
+{
+	return request("PATCH", endpoint, query, status);
 }
 
 void Manabu::Transactor::setAuthToken(const string token)
