@@ -18,6 +18,19 @@ set(BUILD_DYNAMIC true)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${LIBMANABU_INCLUDE_DIRS})
 
+if(MSYS)
+	if(EXISTS ${PROJECT_SOURCE_DIR}/opt/boost)
+		set(BOOST_ROOT ${PROJECT_SOURCE_DIR}/opt/boost/)
+	elseif(EXISTS ${PROJECT_SOURCE_DIR}/../boost)
+		set(BOOST_ROOT ${PROJECT_SOURCE_DIR}/../boost/)
+	endif()
+	#set(BOOST_INCLUDEDIR /mingw64/include/)
+	#set(BOOST_LIBDIR /mingw64/lib/)
+	#set(BOOST_ROOT /mingw64/)
+	include_directories(AFTER /mingw64/include/)
+	link_directories(AFTER /mingw64/lib/)
+endif(MSYS)
+
 # Generate dynamic library
 find_package(Boost REQUIRED
 	system
@@ -54,8 +67,8 @@ if(BUILD_DYNAMIC)
 endif(BUILD_DYNAMIC)
 
 # Specs
-add_subdirectory(${PROJECT_SOURCE_DIR}/spec)
-enable_testing()
+#add_subdirectory(${PROJECT_SOURCE_DIR}/spec)
+#enable_testing()
 
 # Generate static library
 set(MANABU_STATIC_LIB_TARGET static)

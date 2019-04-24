@@ -33,6 +33,43 @@ Then, run the specs built during the make process:
 ./spec/libmanabu_spec --log-level=all
 ```
 
+Windows
+=======
+We recommend you compile on MSYS2 on Windows. Assuming you have MSYS2, you'll need to 
+install Boost, CURL, and OpenSSL. You can do most of this with the following command: 
+```pacman -S openssl openssl-devel libcurl libcurl-devel mingw-w64-x86_64-msgpack-c```
+Note that we didn't install Boost - at the time of this writing the Boost distribution 
+available in MSYS2 is missing several components we need. The best solution is to 
+compile Boost yourself. For the impatient:
+
+```sh
+cd opt
+git clone --recursive https://github.com/boostorg/boost.git
+cd boost
+./bootstrap.sh
+./b2
+./b2 headers
+```
+
+There's a more detailed guide available on the Boost website. _A pre-compiled Boost 
+distribution may work, but we have yet to try it._
+!NOTE! Cloning and compiling Boost can take a *very* long time.
+  
+CMake will check for opt/boost and ../boost - if you have boost in another location 
+you'll need to specify the BOOST_ROOT or BOOST_INCLUDEDIR and BOOST_LIBDIR attributes 
+when you call the cmake command.
+
+Building
+--------
+Assuming you have everything installed and ready, compiling libmanabu is a fairly 
+standard CMake procedure:
+```sh
+mkdir build
+cd build
+cmake ..
+make
+```
+
 License & Contribution
 ======================
 libmanabu is Copyright 2012 K.K. GenSouSha of Aichi, Japan  

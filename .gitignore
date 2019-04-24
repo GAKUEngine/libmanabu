@@ -4,5 +4,6 @@
 /src/version.h
 *.orig
 /tmp/
+/opt/boost
 
 .DS_Store
