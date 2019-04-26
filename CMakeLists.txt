@@ -15,6 +15,9 @@ configure_file(${PROJECT_SOURCE_DIR}/src/version.h.in ${PROJECT_SOURCE_DIR}/src/
 set(BUILD_TESTS true)
 set(BUILD_DYNAMIC true)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${LIBMANABU_INCLUDE_DIRS})
 
