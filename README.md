@@ -35,8 +35,12 @@ Then, run the specs built during the make process:
 
 Windows
 =======
-We recommend you compile on MSYS2 on Windows. Assuming you have MSYS2, you'll need to 
-install Boost, CURL, and OpenSSL. You can do most of this with the following command: 
+We recommend you compile on MSYS2 on Windows. If you already have MSYS2, make sure you are 
+up to date by running ```pacman -Syu```. You likely already have build tools installed, 
+but just in case you may want to run: 
+```pacman -S mingw-w64-x86_64-toolchain base-devel cmake gcc```.
+You'll need the development libraries for Boost, CURL, and OpenSSL. You can do most of this 
+with the following command: 
 ```pacman -S openssl openssl-devel libcurl libcurl-devel mingw-w64-x86_64-msgpack-c```
 Note that we didn't install Boost - at the time of this writing the Boost distribution 
 available in MSYS2 is missing several components we need. The best solution is to 
@@ -69,6 +73,13 @@ cd build
 cmake ..
 make
 ```
+
+OS X
+====
+If you are using a package management tool like HomeBrew you can get up and running with 
+libmanabu fairly quickly. Just make sure you have the required libraries and tools 
+installed: CMake, Boost, OpenSSL/libssl, msgpack-c. You can install these quickly with 
+```brew install cmake boost openssl msgpack```.
 
 License & Contribution
 ======================
