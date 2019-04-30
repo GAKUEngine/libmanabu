@@ -6,8 +6,12 @@ C, Java, Python and PHP (*coming soon*). For native Ruby interfaces use the nati
 
 Building
 ========
-libmanabu requires CMake and a few other tools to build. After cloning the repository, you can 
-build libmanabu with the following standard CMake build steps:
+libmanabu requires CMake, the Boost development libraries and headers, OpenSSL development 
+libraries and headers, msgpack-c, and possibly a few other tools depending on your system.  
+  
+*System specific preparation guides are listed below.*  
+  
+After cloning the repository, you can build libmanabu with the following standard CMake build steps:
 
 ```sh
 cd libmanabu
@@ -18,29 +22,23 @@ make
 ```
 
 This will build the libmanabu dynamic library (and specs).
+  
+System specific preparation notes follow:
 
 Linux Build Notes
 -----------------
 There are no particular build notes for Linux other than that you will need to install 
 CMake, Boost development libraries, OpenSSL development libraries, and msgpack-c.
 
-
-Testing
-=======
-After building libmanabu with cmake, start up a gaku testing container instance with:
-
+On Ubuntu or Debian based systems you can generally install all of the required packages 
+with:
 ```sh
-gaku contianer start
-gaku container testing
+sudo apt-get install cmake g++ libboost-all-dev libssl-dev libmsgpack-dev
 ```
 
-Then, run the specs built during the make process:
-```sh
-./spec/libmanabu_spec --log-level=all
-```
 
-Windows
-=======
+Windows Build Notes
+-------------------
 We recommend you compile on MSYS2 on Windows. If you already have MSYS2, make sure you are 
 up to date by running ```pacman -Syu```. You likely already have build tools installed, 
 but just in case you may want to run: 
@@ -69,23 +67,27 @@ CMake will check for opt/boost and ../boost - if you have boost in another locat
 you'll need to specify the BOOST_ROOT or BOOST_INCLUDEDIR and BOOST_LIBDIR attributes 
 when you call the cmake command.
 
-Building
---------
-Assuming you have everything installed and ready, compiling libmanabu is a fairly 
-standard CMake procedure:
-```sh
-mkdir build
-cd build
-cmake ..
-make
-```
 
-OS X
-====
+OS X Build Notes
+----------------
 If you are using a package management tool like HomeBrew you can get up and running with 
 libmanabu fairly quickly. Just make sure you have the required libraries and tools 
 installed: CMake, Boost, OpenSSL/libssl, msgpack-c. You can install these quickly with 
 ```brew install cmake boost openssl msgpack```.
+
+Testing
+=======
+After building libmanabu with cmake, start up a gaku testing container instance with:
+
+```sh
+gaku contianer start
+gaku container testing
+```
+
+Then, run the specs built during the make process:
+```sh
+./spec/libmanabu_spec --log-level=all
+```
 
 License & Contribution
 ======================
