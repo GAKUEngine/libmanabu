@@ -19,6 +19,12 @@ make
 
 This will build the libmanabu dynamic library (and specs).
 
+Linux Build Notes
+-----------------
+There are no particular build notes for Linux other than that you will need to install 
+CMake, Boost development libraries, OpenSSL development libraries, and msgpack-c.
+
+
 Testing
 =======
 After building libmanabu with cmake, start up a gaku testing container instance with:
