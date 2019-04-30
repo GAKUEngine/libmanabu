@@ -99,7 +99,7 @@ string Manabu::Transactor::request(const string& verb, const string& endpoint, c
 			headers = curl_slist_append(headers, ("Authorization: " + this->authToken).c_str());
 
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-		curl_easy_setopt(curl, CURLOPT_USERAGENT, std::string("libmanabu/") + LIBMANABU_VERSION);
+		curl_easy_setopt(curl, CURLOPT_USERAGENT, (std::string("libmanabu/") + LIBMANABU_VERSION).c_str());
 
 		curl_easy_setopt(curl, CURLOPT_URL, url_stream.str().c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeMemoryCallback);
