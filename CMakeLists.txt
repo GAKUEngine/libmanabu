@@ -43,6 +43,12 @@ find_package(Boost REQUIRED
 find_package(OpenSSL)
 find_package(CURL)
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+set(LIB_NAME manabu)
+
 set(LIBMANABU_DYNAMIC_LIB_TARGET manabu)
 set(LIBMANABU_CXX_FILES
 	${PROJECT_SOURCE_DIR}/src/manabu.cpp
@@ -66,16 +72,16 @@ if(BUILD_DYNAMIC)
   set_target_properties(${LIBMANABU_DYNAMIC_LIB_TARGET}
     PROPERTIES
     POSITION_INDEPENDENT_CODE TRUE
+	OUTPUT_NAME ${LIB_NAME}
   )
 endif(BUILD_DYNAMIC)
 
 # Specs
-#add_subdirectory(${PROJECT_SOURCE_DIR}/spec)
-#enable_testing()
+add_subdirectory(${PROJECT_SOURCE_DIR}/spec)
+enable_testing()
 
 # Generate static library
-set(MANABU_STATIC_LIB_TARGET static)
-set(STATIC_LIB_NAME libmanabu_static)
+set(MANABU_STATIC_LIB_TARGET manabu_static)
 
 add_library(${MANABU_STATIC_LIB_TARGET} ${LIBMANABU_CXX_FILES})
 target_link_libraries(${MANABU_STATIC_LIB_TARGET} ${LIBMANABU_LINK_LIBRARIES})
@@ -83,5 +89,14 @@ target_link_libraries(${MANABU_STATIC_LIB_TARGET} ${LIBMANABU_LINK_LIBRARIES})
 set_target_properties(${MANABU_STATIC_LIB_TARGET}
 	PROPERTIES
 	POSITION_INDEPENDENT_CODE TRUE
-	OUTPUT_NAME ${STATIC_LIB_NAME}
+	OUTPUT_NAME ${LIB_NAME}
+)
+
+install(
+	#	TARGETS libmanabu libmanabu_static
+#
+#    cmake/libmanabuConfig.cmake
+#    ${CMAKE_CURRENT_BINARY_DIR}/lib/libmanabu.so
+#	DESTINATION
+#    ${ConfigPackageLocation}
 )
