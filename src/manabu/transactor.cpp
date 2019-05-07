@@ -1,5 +1,5 @@
-#include "transactor.h"
-#include "../version.h"
+#include "manabu/transactor.h"
+#include "manabu/version.h"
 
 #include <curl/curl.h>
 #include <sstream>
