@@ -126,8 +126,9 @@ export(TARGETS
     manabu manabu_static
 	FILE "${CMAKE_CURRENT_BINARY_DIR}/ManabuConfig.cmake"
 )
+include(GNUInstallDirs)
 install(EXPORT
 	ManabuConfig
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
+	DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
 )
 
