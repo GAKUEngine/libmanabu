@@ -1,4 +1,4 @@
-#include "student.h"
+#include "manabu/student.h"
 
 Manabu::Student::Student(Transactor *transactor)
 	: id(ID_NULL)
