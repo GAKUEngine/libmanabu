@@ -12,8 +12,7 @@ set(MANABU_LIB_VERSION_PATCH 0)
 set(MANABU_LIB_VERSION "${MANABU_LIB_VERSION_MAJOR}.${MANABU_LIB_VERSION_MINOR}.${MANABU_LIB_VERSION_PATCH}")
 configure_file(${PROJECT_SOURCE_DIR}/src/version.h.in ${PROJECT_SOURCE_DIR}/include/manabu/version.h @ONLY)
 
-set(BUILD_TESTS true)
-set(BUILD_DYNAMIC true)
+option(BUILD_TESTS "Build library tests/specs" ON)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -37,7 +36,7 @@ find_package(Boost REQUIRED
 	system
 	filesystem
 	date_time
-	)
+)
 find_package(OpenSSL)
 find_package(CURL)
 
@@ -47,7 +46,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(LIB_NAME manabu)
 
-set(LIBMANABU_DYNAMIC_LIB_TARGET manabu)
+#set(LIBMANABU_DYNAMIC_LIB_TARGET manabu)
 set(LIBMANABU_CXX_FILES
 	${PROJECT_SOURCE_DIR}/src/manabu.cpp
 	${PROJECT_SOURCE_DIR}/src/manabu/transactor.cpp
@@ -64,49 +63,52 @@ set(LIBMANABU_LINK_LIBRARIES
 	msgpackc
 )
 
-if(BUILD_DYNAMIC)
-  add_library(${LIBMANABU_DYNAMIC_LIB_TARGET} SHARED ${LIBMANABU_CXX_FILES})
-  target_link_libraries(${LIBMANABU_DYNAMIC_LIB_TARGET} ${LIBMANABU_LINK_LIBRARIES})
-  set_target_properties(${LIBMANABU_DYNAMIC_LIB_TARGET}
-    PROPERTIES
-    POSITION_INDEPENDENT_CODE TRUE
-	OUTPUT_NAME ${LIB_NAME}
-  )
-endif(BUILD_DYNAMIC)
-
-# Specs
-add_subdirectory(${PROJECT_SOURCE_DIR}/spec)
-enable_testing()
+# Generate dynamic library
+add_library(manabu SHARED ${LIBMANABU_CXX_FILES})
+target_link_libraries(manabu ${LIBMANABU_LINK_LIBRARIES})
+set_target_properties(manabu
+PROPERTIES
+POSITION_INDEPENDENT_CODE TRUE
+OUTPUT_NAME ${LIB_NAME}
+)
+target_include_directories(manabu PUBLIC ${CMAKE_SOURCE_DIR}/include/)
 
 # Generate static library
-set(MANABU_STATIC_LIB_TARGET manabu_static)
-
-add_library(${MANABU_STATIC_LIB_TARGET} ${LIBMANABU_CXX_FILES})
-target_link_libraries(${MANABU_STATIC_LIB_TARGET} ${LIBMANABU_LINK_LIBRARIES})
-
-set_target_properties(${MANABU_STATIC_LIB_TARGET}
+add_library(manabu_static ${LIBMANABU_CXX_FILES})
+target_link_libraries(manabu_static ${LIBMANABU_LINK_LIBRARIES})
+set_target_properties(manabu_static
 	PROPERTIES
 	POSITION_INDEPENDENT_CODE TRUE
 	OUTPUT_NAME ${LIB_NAME}
 )
+target_include_directories(manabu_static PUBLIC ${CMAKE_SOURCE_DIR}/include/)
 
+# Specs
+if(${BUILD_TESTS})
+	add_subdirectory(${PROJECT_SOURCE_DIR}/spec)
+	enable_testing()
+endif(${BUILD_TESTS})
+
+# Install Headers
+install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/include/
+    DESTINATION include
+    FILES_MATCHING PATTERN "*.h"
+)
+
+# Install Libs
 install(
 	TARGETS manabu manabu_static
-	EXPORT manabuConfig
+	EXPORT ManabuConfig
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
 export(TARGETS
-    manabu
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/manabuConfig.cmake"
+    manabu manabu_static
+	FILE "${CMAKE_CURRENT_BINARY_DIR}/ManabuConfig.cmake"
 )
-install(EXPORT
-        manabuConfig
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
-)
+#install(EXPORT
+#	ManabuConfig
+#    DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
+#)
 
-install(
-    DIRECTORY ${CMAKE_SOURCE_DIR}/include/
-    DESTINATION include
-    FILES_MATCHING PATTERN "*.h*"
-)

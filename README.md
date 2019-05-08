@@ -22,6 +22,9 @@ make
 ```
 
 This will build the libmanabu dynamic library (and specs).
+
+If you wish to build libmanabu without building specs/tests then invoke cmake with 
+-DBUILD_TESTS=OFF, like this: ```cmake -DBUILD_TESTS=OFF```.
   
 System specific preparation notes follow:
 
