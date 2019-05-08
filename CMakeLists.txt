@@ -54,6 +54,14 @@ set(LIBMANABU_CXX_FILES
 	${PROJECT_SOURCE_DIR}/src/manabu/student.cpp
 )
 
+set(LIBMANABU_HEADER_FILES
+	${PROJECT_SOURCE_DIR}/include/manabu.h
+	${PROJECT_SOURCE_DIR}/include/manabu/version.h
+	${PROJECT_SOURCE_DIR}/include/manabu/transactor.h
+	${PROJECT_SOURCE_DIR}/include/manabu/authenticator.h
+	${PROJECT_SOURCE_DIR}/include/manabu/student.h
+)
+
 set(LIBMANABU_LINK_LIBRARIES
 	${Boost_FILESYSTEM_LIBRARY}
 	${Boost_SYSTEM_LIBRARY}
@@ -66,22 +74,32 @@ set(LIBMANABU_LINK_LIBRARIES
 # Generate dynamic library
 add_library(manabu SHARED ${LIBMANABU_CXX_FILES})
 target_link_libraries(manabu ${LIBMANABU_LINK_LIBRARIES})
-set_target_properties(manabu
-PROPERTIES
-POSITION_INDEPENDENT_CODE TRUE
-OUTPUT_NAME ${LIB_NAME}
+target_include_directories(manabu
+	PUBLIC
+	$<INSTALL_INTERFACE:include>
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
-target_include_directories(manabu PUBLIC ${CMAKE_SOURCE_DIR}/include/)
+set_target_properties(manabu
+	PROPERTIES
+	POSITION_INDEPENDENT_CODE TRUE
+	OUTPUT_NAME ${LIB_NAME}
+	#PUBLIC_HEADER "${LIBMANABU_HEADER_FILES}"
+)
 
 # Generate static library
 add_library(manabu_static ${LIBMANABU_CXX_FILES})
 target_link_libraries(manabu_static ${LIBMANABU_LINK_LIBRARIES})
+target_include_directories(manabu_static
+	PUBLIC
+	$<INSTALL_INTERFACE:include>
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
 set_target_properties(manabu_static
 	PROPERTIES
 	POSITION_INDEPENDENT_CODE TRUE
 	OUTPUT_NAME ${LIB_NAME}
+	#PUBLIC_HEADER ${LIBMANABU_HEADER_FILES}
 )
-target_include_directories(manabu_static PUBLIC ${CMAKE_SOURCE_DIR}/include/)
 
 # Specs
 if(${BUILD_TESTS})
@@ -102,13 +120,14 @@ install(
 	EXPORT ManabuConfig
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
+	#PUBLIC_HEADER DESTINATION include
 )
 export(TARGETS
     manabu manabu_static
 	FILE "${CMAKE_CURRENT_BINARY_DIR}/ManabuConfig.cmake"
 )
-#install(EXPORT
-#	ManabuConfig
-#    DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
-#)
+install(EXPORT
+	ManabuConfig
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
+)
 
