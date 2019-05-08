@@ -97,14 +97,12 @@ install(
 	ARCHIVE DESTINATION lib
 )
 export(TARGETS
-        manabu
-		NAMESPACE Manabu::
+    manabu
     FILE "${CMAKE_CURRENT_BINARY_DIR}/manabuConfig.cmake"
 )
 install(EXPORT
         manabuConfig
     DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
-	NAMESPACE Manabu::
 )
 
 install(
