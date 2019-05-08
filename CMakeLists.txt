@@ -64,8 +64,6 @@ set(LIBMANABU_LINK_LIBRARIES
 	msgpackc
 )
 
-include(GenerateExportHeader)
-
 if(BUILD_DYNAMIC)
   add_library(${LIBMANABU_DYNAMIC_LIB_TARGET} SHARED ${LIBMANABU_CXX_FILES})
   target_link_libraries(${LIBMANABU_DYNAMIC_LIB_TARGET} ${LIBMANABU_LINK_LIBRARIES})
@@ -92,46 +90,21 @@ set_target_properties(${MANABU_STATIC_LIB_TARGET}
 	OUTPUT_NAME ${LIB_NAME}
 )
 
-generate_export_header(manabu)
-
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-  "${CMAKE_CURRENT_BINARY_DIR}/manabu/manabuVersion.cmake"
-  VERSION ${MANABU_LIB_VERSION}
-  COMPATIBILITY AnyNewerVersion
-)
-export(EXPORT manabuTargets
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/manabu/manabuTargets.cmake"
-  NAMESPACE Upstream::
-)
-configure_file(manabuConfig.cmake
-  "${CMAKE_CURRENT_BINARY_DIR}/manabu/manabuConfig.cmake"
-  COPYONLY
-)
-set(ConfigPackageLocation lib/cmake/manabu)
-install(EXPORT manabuTargets
-  FILE
-    manabuTargets.cmake
-  NAMESPACE
-    Upstream::
-  DESTINATION
-    ${ConfigPackageLocation}
-)
-
-install(
-  FILES
-    cmake/manabuConfig.cmake
-    "${CMAKE_CURRENT_BINARY_DIR}/manabu/manabuVersion.cmake"
-  DESTINATION
-    ${ConfigPackageLocation}
-  COMPONENT
-    Devel
-)
-
 install(
 	TARGETS manabu manabu_static
+	EXPORT manabuConfig
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
+)
+export(TARGETS
+        manabu
+		NAMESPACE Manabu::
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/manabuConfig.cmake"
+)
+install(EXPORT
+        manabuConfig
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
+	NAMESPACE Manabu::
 )
 
 install(
