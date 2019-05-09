@@ -83,13 +83,13 @@ Testing
 After building libmanabu with cmake, start up a gaku testing container instance with:
 
 ```sh
-gaku contianer start
+gaku container start
 gaku container testing
 ```
 
 Then, run the specs built during the make process:
 ```sh
-./spec/libmanabu_spec --log-level=all
+./bin/libmanabu_spec --log_level=all
 ```
 
 License & Contribution
