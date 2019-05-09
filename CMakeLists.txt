@@ -31,14 +31,17 @@ if(MSYS)
 	link_directories(AFTER /mingw64/lib/)
 endif(MSYS)
 
+set(CURL_LIBRARY "-lcurl")
+
 # Generate dynamic library
 find_package(Boost REQUIRED
 	system
 	filesystem
 	date_time
 )
-find_package(OpenSSL)
+#find_package(OpenSSL)
 find_package(CURL)
+find_package(msgpack)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -123,7 +126,7 @@ install(
 	#PUBLIC_HEADER DESTINATION include
 )
 export(TARGETS
-    manabu manabu_static
+	manabu manabu_static
 	FILE "${CMAKE_CURRENT_BINARY_DIR}/ManabuConfig.cmake"
 )
 include(GNUInstallDirs)
@@ -131,4 +134,3 @@ install(EXPORT
 	ManabuConfig
 	DESTINATION "${CMAKE_INSTALL_DATADIR}/manabu/cmake"
 )
-
