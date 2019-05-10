@@ -23,6 +23,7 @@ BOOST_AUTO_TEST_SUITE(connectivity_suite)
 	// Check that the [test] server is running
 	BOOST_AUTO_TEST_CASE(server_status) {
 		Manabu::Manabu manabu = Manabu::Manabu();
+		BOOST_CHECK_EQUAL(manabu.connect(), true);
 		BOOST_CHECK_EQUAL(manabu.connect("http", "localhost", 9000), true);
 	}
 
